@@ -1,2 +1,2 @@
-# MachineLearningNote
+# k-近邻算法（kNN）
 k-近邻算法相关练习代码
