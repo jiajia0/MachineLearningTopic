@@ -301,14 +301,14 @@ def makeTreeFull(myTree, labels_full, parentClass):
 
 if __name__ == '__main__':
     myDat, labels, labels_full = createDataSet()
-    print(labels_full)
+    # print(labels_full)
     myTree = createTree(myDat, labels)
-    print(myTree)
+    # print(myTree)
     makeTreeFull(myTree, labels_full, None)
-    print(myTree)
-    treeDepth = treePlotter.getTreeDepth(myTree)
-    print(treeDepth)
-    leafs = treePlotter.getNumLeafs(myTree)
-    print(leafs)
+    # print(myTree)
+    # treeDepth = treePlotter.getTreeDepth(myTree)
+    # print(treeDepth)
+    # leafs = treePlotter.getNumLeafs(myTree)
+    # print(leafs)
     treePlotter.createPlot(myTree)
 
