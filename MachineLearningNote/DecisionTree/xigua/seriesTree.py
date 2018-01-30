@@ -5,7 +5,7 @@
 import collections
 from math import log
 import operator
-import treePlotter
+from xigua import treePlotter
 
 
 def calcShannonEnt(dataSet):
