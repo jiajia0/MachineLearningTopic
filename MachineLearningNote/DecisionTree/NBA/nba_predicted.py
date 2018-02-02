@@ -7,6 +7,9 @@
 
 import pandas as pd
 from collections import defaultdict
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.model_selection import cross_val_score
+import numpy as np
 
 
 def load_dataset():
@@ -21,10 +24,8 @@ def load_dataset():
     # 新增主/客场队的上一次比赛是否胜利的特征
     dataset['HomeLastWin'] = False
     dataset['VisitorLastWin'] = False
-    dataset['HomeLastWin'].astype(bool)
-    dataset['VisitorLastWin'].astype(bool)
     # key：队伍名称，value：上次比赛是否胜利
-    won_last = defaultdict(int)
+    won_last = defaultdict(bool)
     # 遍历所有的数据，记录每一次比赛中的各队在上次比赛中是否胜利
     for index, row in dataset.iterrows():
         # 找到主场队伍名称
@@ -39,13 +40,30 @@ def load_dataset():
         dataset.ix[index] = row
         # 设置本次主场队是否胜利
         won_last[home_team] = row['HomeWin']
-        # 设置本次客场对是否胜利
+        # 设置本次客场队是否胜利
         won_last[visitor_team] = not row['HomeWin']
-    print(dataset.ix[20: 25])
     return dataset
+
+
+def createTree(dataset):
+    """
+    创建决策树
+    :param dataset:
+    :return:
+    """
+
+    clf = DecisionTreeClassifier(random_state=14)
+
+    x_previouswins = dataset[['HomeLastWin', 'VisitorLastWin']].values
+
+    y_true = dataset['HomeWin']
+
+    scores = cross_val_score(clf, x_previouswins, y_true, scoring='accuracy')
+
+    print("Using just the last result from the home and visitor teams")
+    print(np.mean(scores) * 100)
 
 
 if __name__ == '__main__':
     dataset = load_dataset()
-    # print(dataset['HomeWin'])
-
+    createTree(dataset)
