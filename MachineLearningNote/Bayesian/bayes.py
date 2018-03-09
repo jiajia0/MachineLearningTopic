@@ -60,6 +60,25 @@ def setOfWords2Vec(vocabList, inputSet):
     return returnVec
 
 
+def bagOfWords2Vec(vocabList, inputSet):
+    """
+    用来检测文档中是否出现词汇表中的数据，0代表没有出现，没出现一次就加一
+    :param vocabList: 词汇表
+    :param inputSet:  文档
+    :return:
+    """
+    # 首先创建一个全是0的列表，列表长度就是词汇表的长度
+    returnVec = [0] * len(vocabList)
+
+    # 遍历一遍文档
+    for word in inputSet:
+        # 如果文档中的某个单词在词汇表中，则将加1
+        if word in vocabList:
+            returnVec[vocabList.index(word)] += 1
+
+    return returnVec
+
+
 def trainNB0(trainMatrix, trainCategory):
     """
     计算出每个单词在各类文档中出现的概率
@@ -133,7 +152,7 @@ if __name__ == '__main__':
     trainMat = []
     for postinDoc in listOPosts:
         trainMat.append(setOfWords2Vec(myVocabList, postinDoc))
-    p0Vect, p1Vect, pAbusive =  trainNB0(trainMat, listClasses)
+    p0Vect, p1Vect, pAbusive = trainNB0(trainMat, listClasses)
     testEntry = ['stupid', 'garbage']
     thisDoc = array(setOfWords2Vec(myVocabList, testEntry))
     classify = classifyNB(thisDoc, p0Vect, p1Vect, pAbusive)
