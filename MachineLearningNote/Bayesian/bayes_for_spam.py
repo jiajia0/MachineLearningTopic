@@ -64,9 +64,9 @@ def spamTest():
         # 删除该索引防止再次出现
         del trainingSet[randIndex]
 
-    # 用来存放测试数据矩阵
+    # 用来存放训练数据矩阵
     trainMat= []
-    # 用来存放测试数据的分类
+    # 用来存放训练数据的分类
     trainClasses = []
     # 将剩下的40份邮件作为训练数据
     for docIndex in trainingSet:
