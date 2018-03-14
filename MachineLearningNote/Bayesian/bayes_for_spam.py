@@ -52,7 +52,7 @@ def spamTest():
     vocabList = createVocabList(docList)
     # 代表着50份邮件的下标
     trainingSet = list(range(50))
-    # 用来存放随机选取的邮件下标
+    # 用来存放随机选取的邮件下标，用来测试
     testSet = []
 
     # 随机选取十份电子邮件进行测试
@@ -68,7 +68,7 @@ def spamTest():
     trainMat= []
     # 用来存放测试数据的分类
     trainClasses = []
-    # 将刚才随机生成的十份电子邮件分别处理
+    # 将剩下的40份邮件作为训练数据
     for docIndex in trainingSet:
         # 处理对应索引的电子邮件，将其转换为一个列表，列表长度为词汇表的长度，0代表该单词在当前邮件中没有出现，1代表出现了
         trainMat.append(setOfWords2Vec(vocabList, docList[docIndex]))
