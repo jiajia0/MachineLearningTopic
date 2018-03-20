@@ -150,6 +150,38 @@ def majorityCnt(classList):
     return sortedClassCount[0][0]
 
 
+def judgeEqualLabels(dataSet):
+    """
+    判断数据集的各个属性集是否完全一致
+    :param dataSet:
+    :return:
+    """
+    # 计算出样本集中共有多少个属性，最后一个为类别
+    feature_leng = len(dataSet[0]) - 1
+
+    # 计算出共有多少个数据
+    data_leng = len(dataSet)
+
+    # 标记每个属性中第一个属性值是什么
+    first_feature = ''
+
+    # 各个属性集是否完全一致
+    is_equal = True
+
+    # 遍历全部属性
+    for i in range(feature_leng):
+        # 得到第一个样本的第i个属性
+        first_feature = dataSet[0][i]
+
+        # 与样本集中所有的数据进行对比，看看在该属性上是否都一致
+        for _ in range(1, data_leng):
+            # 如果发现不相等的，则直接返回False
+            if first_feature != dataSet[_][i]:
+                return False
+
+    return is_equal
+
+
 def createTree(dataSet, labels):
     """
     创建决策树
@@ -164,8 +196,8 @@ def createTree(dataSet, labels):
     if classList.count(classList[0]) == len(classList):
         return classList[0]
 
-    # 计算第一行有多少个数据，如果只有一个的话说明所有的特征属性都遍历完了，剩下的一个就是类别标签
-    if len(dataSet[0]) == 1:
+    # 计算第一行有多少个数据，如果只有一个的话说明所有的特征属性都遍历完了，剩下的一个就是类别标签，或者所有的样本在全部属性上都一致
+    if len(dataSet[0]) == 1 or judgeEqualLabels(dataSet):
         # 返回剩下标签中出现次数较多的那个
         return majorityCnt(classList)
 
@@ -301,9 +333,7 @@ def makeTreeFull(myTree, labels_full, parentClass):
 
 if __name__ == '__main__':
     myDat, labels, labels_full = createDataSet()
-    # print(labels_full)
     myTree = createTree(myDat, labels)
-    # print(myTree)
     makeTreeFull(myTree, labels_full, None)
     # print(myTree)
     # treeDepth = treePlotter.getTreeDepth(myTree)
