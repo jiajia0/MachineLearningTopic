@@ -344,7 +344,57 @@ def createDataSet():
     return dataSet, labels, labels_full, Wx
 
 
-def makeTreeFull(myTree, labels_full, parentClass, default):
+def makeTreeFull(myTree, labels_full, default):
+    """
+    将树中的不存在的特征标签进行补全，补全为父节点中出现最多的类别
+    :param myTree: 生成的树
+    :param labels_full: 特征的全部标签
+    :param parentClass: 父节点中所含最多的类别
+    :param default: 如果缺失标签中父节点无法判断类别则使用该值
+    :return:
+    """
+    # 这里所说的父节点就是当前根节点，把当前根节点下不存在的特征标签作为子节点
+
+    # 拿到当前的根节点
+    root_key = list(myTree.keys())[0]
+
+    # 拿到根节点下的所有分类，可能是子节点（好瓜or坏瓜）也可能不是子节点（再次划分的属性值）
+    sub_tree = myTree[root_key]
+
+    # 如果是叶子节点就结束
+    if isinstance(sub_tree, str):
+        return
+
+    # 找到使用当前节点分类下最多的种类，该分类结果作为新特征标签的分类，如：色泽下面没有浅白则用色泽中有的青绿分类作为浅白的分类
+    root_class = []
+    # 把已经分好类的结果记录下来
+    for sub_key in sub_tree.keys():
+        if isinstance(sub_tree[sub_key], str):
+            root_class.append(sub_tree[sub_key])
+
+    # 找到本层出现最多的类别，可能会出现相同的情况取其一
+    if len(root_class):
+        most_class = collections.Counter(root_class).most_common(1)[0][0]
+    else:
+        most_class = None# 当前节点下没有已经分类好的属性
+    # print(most_class)
+
+    # 循环遍历全部特征标签，将不存在标签添加进去
+    for label in labels_full[root_key]:
+        if label not in sub_tree.keys():
+            if most_class is not None:
+                sub_tree[label] = most_class
+            else:
+                sub_tree[label] = default
+
+    # 递归处理
+    for sub_key in sub_tree.keys():
+        if isinstance(sub_tree[sub_key], dict):
+            makeTreeFull(myTree=sub_tree[sub_key], labels_full=labels_full, default=default)
+
+
+# 以下内容为原来的思路，无需理会，以防万一基于保留观察
+'''def makeTreeFull(myTree, labels_full, parentClass, default):
     """
     将数中的不存在的特征标签进行补全，补全为父节点中出现最多的类别
     :param myTree: 生成的树
@@ -390,7 +440,7 @@ def makeTreeFull(myTree, labels_full, parentClass, default):
     for sub_key in sub_tree.keys():
         if isinstance(sub_tree[sub_key], dict):
             makeTreeFull(myTree=sub_tree[sub_key], labels_full=labels_full, parentClass=most_class, default=default)
-
+'''
 
 if __name__ == '__main__':
     """
@@ -402,5 +452,5 @@ if __name__ == '__main__':
     # myTree = {'纹理': {'稍糊': {'敲击': {'清脆': '坏瓜', '浊响': '坏瓜', '沉闷': '好瓜'}}, '模糊': {'色泽': {'青绿': '好瓜', '浅白': '坏瓜'}}}}
     # treePlotter.createPlot(myTree)
     # labels_full = {'纹理': {'稍糊', '模糊'}, '敲击': {'清脆', '沉闷', '浊响'}, '色泽': {'乌黑', '青绿', '浅白'}}
-    makeTreeFull(myTree=myTree, labels_full=labels_full, parentClass=None, default='未知')
+    makeTreeFull(myTree=myTree, labels_full=labels_full, default='未知')
     treePlotter.createPlot(myTree)

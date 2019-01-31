@@ -287,54 +287,59 @@ def createDataSet():
     return dataSet, labels, labels_full
 
 
-def makeTreeFull(myTree, labels_full, parentClass):
+def makeTreeFull(myTree, labels_full, default):
     """
-    将数中的不存在的特征标签进行补全，补全为父节点中出现最多的类别
+    将树中的不存在的特征标签进行补全，补全为父节点中出现最多的类别
     :param myTree: 生成的树
     :param labels_full: 特征的全部标签
     :param parentClass: 父节点中所含最多的类别
+    :param default: 如果缺失标签中父节点无法判断类别则使用该值
     :return:
     """
+    # 这里所说的父节点就是当前根节点，把当前根节点下不存在的特征标签作为子节点
+
     # 拿到当前的根节点
     root_key = list(myTree.keys())[0]
 
-    # 得到根节点对应的子树，也就是key对应的内容
+    # 拿到根节点下的所有分类，可能是子节点（好瓜or坏瓜）也可能不是子节点（再次划分的属性值）
     sub_tree = myTree[root_key]
 
     # 如果是叶子节点就结束
     if isinstance(sub_tree, str):
         return
 
+    # 找到使用当前节点分类下最多的种类，该分类结果作为新特征标签的分类，如：色泽下面没有浅白则用色泽中有的青绿分类作为浅白的分类
+    root_class = []
+    # 把已经分好类的结果记录下来
+    for sub_key in sub_tree.keys():
+        if isinstance(sub_tree[sub_key], str):
+            root_class.append(sub_tree[sub_key])
+
+    # 找到本层出现最多的类别，可能会出现相同的情况取其一
+    if len(root_class):
+        most_class = collections.Counter(root_class).most_common(1)[0][0]
+    else:
+        most_class = None# 当前节点下没有已经分类好的属性
+    # print(most_class)
+
     # 循环遍历全部特征标签，将不存在标签添加进去
     for label in labels_full[root_key]:
         if label not in sub_tree.keys():
-            if parentClass is not None:
-                sub_tree[label] = parentClass
-
-    # 当前层对应的分类列表
-    current_class = []
-
-    # 循环遍历一下子树，找到类别最多的那个，如果此时没有分类的话就是None
-    for sub_key in sub_tree.keys():
-        if isinstance(sub_tree[sub_key], str):
-            current_class.append(sub_tree[sub_key])
-
-    # 找到本层出现最多的类别，作为parentLabel传递给下一次递归
-    if len(current_class):
-        most_class = collections.Counter(current_class).most_common(1)[0][0]
-    else:
-        most_class = None
+            if most_class is not None:
+                sub_tree[label] = most_class
+            else:
+                sub_tree[label] = default
 
     # 递归处理
     for sub_key in sub_tree.keys():
         if isinstance(sub_tree[sub_key], dict):
-            makeTreeFull(myTree=sub_tree[sub_key], labels_full=labels_full, parentClass=most_class)
+            makeTreeFull(myTree=sub_tree[sub_key], labels_full=labels_full, default=default)
 
 
 if __name__ == '__main__':
     myDat, labels, labels_full = createDataSet()
     myTree = createTree(myDat, labels)
-    makeTreeFull(myTree, labels_full, None)
+    makeTreeFull(myTree, labels_full, '未知')
     # print(myTree)
     # treeDepth = treePlotter.getTreeDepth(myTree)
     # print(treeDepth)
