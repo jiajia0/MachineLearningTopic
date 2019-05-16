@@ -44,7 +44,7 @@ def picTo01(filename):
 
     # 得到像素数组，为(32,32,4)
     array = plt.array(img)
-
+    # array = np.asarray(img)
     # 按照公式将其转为01, 公式： 0.299 * R + 0.587 * G + 0.114 * B
 
     gray_array = np.zeros((32, 32))
