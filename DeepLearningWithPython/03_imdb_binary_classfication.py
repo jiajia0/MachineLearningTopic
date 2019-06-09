@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 
 
 # 使用单词频率最大的前10000个数据
-IMDB_FILE_PATH = r'F:\GitRepository\MachineLearningNote\MachineLearningNote\DeepLearningWithPython\datasets\imdb.npz'
+IMDB_FILE_PATH = r'F:\GitRepository\MachineLearningNote\DeepLearningWithPython\datasets\imdb.npz'
 (train_data, train_labels), (test_data, test_labels) = imdb.load_data(path=IMDB_FILE_PATH, num_words=10000)
 
 # print(max([max(sequence) for sequence in train_data])) # 每个train_data[i] 代表一个评论，其中存放的是单词的索引，最大的索引不超过10000

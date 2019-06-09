@@ -9,7 +9,7 @@ from keras import layers
 import numpy as np
 import matplotlib.pyplot as plt
 
-BOSTON_FILE_PATH = r'F:\GitRepository\MachineLearningNote\MachineLearningNote\DeepLearningWithPython\datasets\boston_housing.npz'
+BOSTON_FILE_PATH = r'F:\GitRepository\MachineLearningNote\DeepLearningWithPython\datasets\boston_housing.npz'
 (train_data, train_targets), (test_data, testa_targets) = boston_housing.load_data(path=BOSTON_FILE_PATH)
 
 

@@ -11,7 +11,7 @@ from keras import layers
 from keras.utils import to_categorical
 
 
-MNIST_FILE_PATH = r'F:\GitRepository\MachineLearningNote\MachineLearningNote\DeepLearningWithPython\datasets\mnist.npz'
+MNIST_FILE_PATH = r'F:\GitRepository\MachineLearningNote\DeepLearningWithPython\datasets\mnist.npz'
 (train_images, train_labels), (test_images, test_labels) = mnist.load_data(MNIST_FILE_PATH)
 # digit = train_images[4]
 # plt.imshow(digit, cmap=plt.cm.binary)

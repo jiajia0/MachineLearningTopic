@@ -12,7 +12,7 @@ from keras import activations
 import matplotlib.pyplot as plt
 
 
-REUTERS_FILE_PATH = r'F:\GitRepository\MachineLearningNote\MachineLearningNote\DeepLearningWithPython\datasets\reuters.npz'
+REUTERS_FILE_PATH = r'F:\GitRepository\MachineLearningNote\DeepLearningWithPython\datasets\reuters.npz'
 (train_data, train_labels), (test_data, test_labels) = reuters.load_data(path=REUTERS_FILE_PATH, num_words=10000)
 
 '''
