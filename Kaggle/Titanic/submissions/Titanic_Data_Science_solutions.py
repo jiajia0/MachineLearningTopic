@@ -288,4 +288,5 @@ submission = pd.DataFrame({
         "Survived": Y_pred  # random forest 的预测结果
     })
 
+# Top 74 %
 submission.to_csv('../datasets/my_submission.csv', index=False)
