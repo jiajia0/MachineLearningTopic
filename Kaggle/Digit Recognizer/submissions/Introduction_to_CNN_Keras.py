@@ -174,3 +174,15 @@ most_important_errors = sorted_dela_errors[-6:]
 
 # Show the top 6 errors
 display_errors(most_important_errors, X_val_errors, Y_pred_classes_errors, Y_true_errors)
+
+# predict results
+results = model.predict(test)
+
+# select the indix with the maximum probability
+results = np.argmax(results,axis = 1)
+
+results = pd.Series(results,name="Label")
+
+submission = pd.concat([pd.Series(range(1,28001),name = "ImageId"),results],axis = 1)
+
+submission.to_csv("cnn_mnist_datagen.csv",index=False)
